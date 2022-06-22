@@ -2,6 +2,7 @@ import pygame
 import math
 
 
+
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, *groups):
         super().__init__(*groups)
@@ -12,7 +13,9 @@ class Enemy(pygame.sprite.Sprite):
 
         self.timer = 0
 
+
+
     def update(self,*args):
     # Comandos
-        self.timer += 0.001
-        self.rect.x = 512 + math.sin(self.timer) * 250
+        self.timer += 0.0003
+        self.rect.x = 512 + math.sin(self.timer) * 350

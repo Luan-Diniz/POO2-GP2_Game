@@ -25,13 +25,10 @@ class Player(pygame.sprite.Sprite): # classe Player herda de pygame.sprite.Sprit
             self.rect.top = 40
         elif self.rect.bottom > 728:
             self.rect.bottom = 728
-        elif self.rect.left < 0:
-            self.rect.left = 0
-        elif self.rect.right > 1024:
-            self.rect.right = 1024
-
-
-
+        elif self.rect.left < 32:
+            self.rect.left = 32
+        elif self.rect.right > 992:
+            self.rect.right = 992
 
 
 

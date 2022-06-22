@@ -13,4 +13,3 @@ class Disparo(pygame.sprite.Sprite):
          self.rect.x += self.speed
          if self.rect.left > 1100:
             self.kill()
-

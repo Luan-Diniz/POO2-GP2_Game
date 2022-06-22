@@ -2,12 +2,17 @@ import pygame
 from player import Player
 from enemy import Enemy
 from action import Disparo
+from map import map1
 
-# iniciar pygame#
+
+BLACK = (46, 46, 46)
+VERDE = (0, 128, 0)
+
+# iniciar pygame
 pygame.init()
-# tamanho da janela#
+# tamanho da janela
 display = pygame.display.set_mode([1024, 768])
-# nome do display#
+# nome do display
 pygame.display.set_caption("Jogo do grupo 2")
 
 # Grupos de sprites. (uma das funcionalidades dos grupos de sprite são de detectar colisões entre eles.)
@@ -32,31 +37,45 @@ barraArmamento = font.render("Aqui os armamentos", True, (255, 255, 255), (0, 0,
 barraArmamentoRect = barraArmamento.get_rect()
 barraArmamentoRect.center = (512, 748)
 
-gameLoop = True
-while gameLoop:
-    # eventos de mouse ou teclado
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            gameLoop = False
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                novoDisparo = Disparo(objectGroup, actionGroup)
-                novoDisparo.rect.center = jogador.rect.center # disparo saindo do centro do player
-    # update
-    objectGroup.update()
+# Draw
+def draw_window(current_map):
+    display.fill(BLACK)
+    for y in range(len(current_map)):
+        for x in range(len(current_map[y])):
+            if current_map[y][x] == "X":
+                rect1 = pygame.Rect(x * 32, y * 32, 32, 32)
+                pygame.draw.rect(display, VERDE, rect1)
 
-    # colisões
-    collisions = pygame.sprite.spritecollide(jogador, enemyGroup, False, pygame.sprite.collide_mask)
-    if collisions:
-        print("Game Over")
-        gameLoop = False
-    hits = pygame.sprite.groupcollide(actionGroup, enemyGroup, True, True) # colisão entre tiro e inimigo
-
-    # draw
-    display.fill([46, 46, 46])  # cor da janela
-    objectGroup.update()
     display.blit(barraVida, barraVidaRect)
     display.blit(barraArmamento, barraArmamentoRect)
-    objectGroup.draw(display)  # desenha os sprites
-    pygame.display.update()
+    objectGroup.draw(display)  # desenha os sprites            
 
+# Main
+def main():
+    gameLoop = True
+    while gameLoop:
+        # eventos de mouse ou teclado
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                gameLoop = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    novoDisparo = Disparo(objectGroup, actionGroup)
+                    novoDisparo.rect.center = jogador.rect.center # disparo saindo do centro do player        
+
+        # colliding
+        pygame.sprite.groupcollide(actionGroup, enemyGroup, True, True)  # colisão entre tiro e inimigo
+        collisionPlayerEnemy = pygame.sprite.spritecollide(jogador, enemyGroup, False, pygame.sprite.collide_mask) # colisão entre jogador e inimigo
+        if collisionPlayerEnemy:
+            print("Game Over")
+            gameLoop = False
+
+        # draw
+        draw_window(map1)
+
+        # update
+        objectGroup.update()
+        pygame.display.update()
+
+if __name__ == '__main__':
+    main()
